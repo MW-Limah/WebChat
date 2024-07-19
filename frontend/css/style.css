@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 * {
     margin: 0;
@@ -12,7 +11,7 @@
 }
 
 body {
-    background: url("../images/background.png");
+    background: url("./images/background_chat.jpg");
     color: #f2f2f2;
 }
 
