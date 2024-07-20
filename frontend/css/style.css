@@ -154,3 +154,11 @@ body {
     font-weight: 700;
     color: cadetblue;
 }
+.newlogin{
+        color: #bebebe;
+        background-color: rgb(31, 29, 29);
+        border-radius: 15px;
+        text-align: center;
+        align-self: center;
+    }
+    
