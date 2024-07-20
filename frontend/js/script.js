@@ -60,17 +60,38 @@ const scrollScreen = () => {
     })
 }
 
-const processMessage = ({ data }) => {
-    const { userId, userName, userColor, content } = JSON.parse(data)
+const processMessage = ({data}) => {
+    const {userId, userName, userColor, content, type} = JSON.parse(data)
 
-    const message =
-        userId == user.id
-            ? createMessageSelfElement(content)
-            : createMessageOtherElement(content, userName, userColor)
-
+    let message;
+    if (type === "notification") {
+        message = createNotificationElement(content)
+    } else {
+        message = userId == user.id ? createMessageSelfElement(content) : createMessageOtherElement(content, userName, userColor)
+    }
     chatMessages.appendChild(message)
 
     scrollScreen()
+}
+
+const createNotificationElement = (content) => {
+    const div = document.createElement("div");
+    div.classList.add("newlogin");
+    
+    const h4 = document.createElement("h4");
+    h4.textContent = content;
+    
+    div.appendChild(h4);
+    return div;
+}
+
+const notifyNewUser = () => {
+    const message = {
+        type: "notification",
+        content: `${user.name} entrou no chat`
+    }
+
+    websocket.send(JSON.stringify(message))
 }
 
 const handleLogin = (event) => {
@@ -84,13 +105,19 @@ const handleLogin = (event) => {
     chat.style.display = "flex"
 
     websocket = new WebSocket("wss://webchat-backend-888k.onrender.com")
-    websocket.onmessage = processMessage
+    websocket.onmessage = processMessage;
+
+    websocket.onopen = () => {
+        notifyNewUser();
+    }
 }
 
+
 const sendMessage = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const message = {
+        type: "message",
         userId: user.id,
         userName: user.name,
         userColor: user.color,
